@@ -1,4 +1,5 @@
 import os
+import glob
 import argparse
 
 DESCRIPTION = 'Generate metadata files from existing R-function files'
@@ -7,6 +8,11 @@ EXT_DEFAULT = '.R'
 EXT_HELP = 'The extensions of the input files (default is .R)'
 OUTPUT_DEFAULT = 'FHK'
 OUTPUT_HELP = 'Name of the output directory'
+
+def getFiles():
+    args = get_args() # Solve CLI arguments
+    path = args.folder + '\\*'  + args.extension
+    return glob.glob(path) # Returns a list of files
 
 class FullPaths(argparse.Action):
     """Expand user- and relative-paths"""
