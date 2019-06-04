@@ -5,9 +5,6 @@ import re
 from cliarguments import get_args
 from template import Template
 
-
-outputDir = "fhk" # Output directory
-templates = list()
 patrnFuncLine = re.compile(".*\s*<-\s*function\(.*\)") # Regex for the function declaration line
 patrnFuncName = re.compile("(.*?)\s*<-\s*function\(.*\)") # Extracting the function names
 patrnFuncArgs = re.compile("function\s*(?:\()(.*)(?:\))") # Extracting the functions arguments from the function line
@@ -15,10 +12,11 @@ patrnFuncVars = re.compile("([a-z]+[0-9|A-Z|_|a-z]*)(?=\s*[,|\n|\r\n]|\s|$)") # 
 
 def getFiles():
     args = get_args() # Solve CLI arguments
-    path = args.alignments + '\\*'  + args.extension
+    path = args.folder + '\\*'  + args.extension
     return glob.glob(path) # Returns a list of files
 
-def parseFunctionNames(files):
+def parseFileAndGenerateTemplate(files):
+    templates = list()
     for f in files:
         fp = open(f) # Read the file
         for i, line in enumerate(fp): # Read file line-by-line
@@ -30,11 +28,13 @@ def parseFunctionNames(files):
                 funcArgs = patrnFuncVars.findall(strFuncArgs)
                 templates.append( Template(parsedLine, funcArgs) )
         fp.close()
+    return templates
 
-def createMetadataFiles():
+def createMetadataFiles(templates):
     # Generate the output directory
+    outputDir = get_args().output
     if not os.path.exists(outputDir):
-        os.makedirs(OutputDir)
+        os.makedirs(outputDir)
     # create N number of files based len(fileNames)
     for template in templates:
         outputFile = str(outputDir + "\\" + template.title + ".txt")   # Liitä extensio
@@ -43,9 +43,8 @@ def createMetadataFiles():
 
 def main():
     files = getFiles()
-    metaFileNames = parseFunctionNames(files)
-    # createTemplate()
-    createMetadataFiles()
+    metaTemplates = parseFileAndGenerateTemplate(files)
+    createMetadataFiles(metaTemplates)
 
 if __name__ ==  "__main__":
     main()
