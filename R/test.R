@@ -17,3 +17,9 @@ dsa_malli <- function(a,c,asd,dsa, moro)
 {
   return(a+c)
 }
+
+
+aaa_malli<-function(gugu, gaga, baba)
+{
+  return(gugu * gaga + baba * 10 + 0)
+}

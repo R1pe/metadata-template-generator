@@ -1,8 +1,8 @@
 import re
 from template import Template
 
-functionDeclarationPattern = re.compile(".*\s*<-\s*function\(.*\)") # Regex for the function declaration line
-# patrnFuncName = re.compile("(.*?)\s*<-\s*function\(.*\)") # Extracting the function names
+functionDeclarationLinePattern = re.compile(".*\s*<-\s*function\(.*\)") # Regex for the function declaration line
+functionNamePattern = re.compile("(.*?)\s*<-\s*function\(.*\)") # Extracting the function names
 argumentsPattern = re.compile("function\s*(?:\()(.*)(?:\))") # Extracting the functions arguments from the function line
 componentsPattern = re.compile("([a-z]+[0-9|A-Z|_|a-z]*)(?=\s*[,|\n|\r\n]|\s|$)") # Extracts all components except the model coefficients from function agruments
 
@@ -18,17 +18,17 @@ def parseFileAndGenerateTemplate(files):
     return templates
 
 def isFunctionDeclaration(line):
-    return functionDeclarationPattern.match(line)
+    return functionDeclarationLinePattern.match(line)
 
 def parseLineAndCreateTemplate(line):
     title = parseTitle(line)
     components = parseComponents(line)
     return Template(title, components)
 
-# TODO: This does not work in all cases. i.e myfunc<-function(a,b) { ... }
 def parseTitle(line):
-    """ Extract the file name from the line which also servers as the title """ 
-    return line.split(" ")[0] # Parse line to the first " "
+    """ Extract the function name from the line """
+    return functionNamePattern.match(line).group(1)
+    # return line.split(" ")[0] # Parse line to the first " "
 
 def parseComponents(line):
     # Extract the components from the arguments
