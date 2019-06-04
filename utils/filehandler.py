@@ -1,8 +1,8 @@
 import os
-from cliarguments import get_args
+from cliarguments import getCLIArgs
 
 def createMetadataFiles(templates):
-    outputDir = get_args().output
+    outputDir = getCLIArgs().output
     createOutputDir(outputDir)
     createMetafiles(outputDir, templates)
 
