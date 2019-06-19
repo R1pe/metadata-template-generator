@@ -24,3 +24,25 @@ class Template():
         else:
             tagLine = str('@' + name + ' ' + value)
         return tagLine
+
+class OutputHolder():
+
+    def __init__(self):
+        self._outputDir = None
+        self._templatesList = None
+
+    @property
+    def outputDir(self):
+        return self._outputDir
+
+    @property
+    def templatesList(self):
+        return self._templatesList
+
+    @outputDir.setter
+    def outputDir(self, directory):
+        self._outputDir = directory
+        
+    @templatesList.setter
+    def templatesList(self, templates):
+        self._templatesList = templates

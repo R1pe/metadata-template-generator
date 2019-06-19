@@ -1,5 +1,5 @@
 import re
-from template import Template
+from template import Template, OutputHolder
 
 functionDeclarationPattern = re.compile(".*\s*<-\s*function\(.*\)") # Regex for the function declaration line
 # patrnFuncName = re.compile("(.*?)\s*<-\s*function\(.*\)") # Extracting the function names
