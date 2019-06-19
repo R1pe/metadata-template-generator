@@ -9,12 +9,18 @@ EXT_HELP = 'The extensions of the input files (default is .R)'
 OUTPUT_DEFAULT = 'FHK'
 OUTPUT_HELP = 'Name of the output directory'
 
-def getFiles():
-    args = getCLIArgs() # Solve CLI arguments
-    path = args.folder + '\\*'  + args.extension
-    return glob.glob(path) # Returns a list of files
+class FullPaths(argparse.Action):
+    def __call__(self, parser, namespace, values, option_string=None):
+        setattr(namespace, self.dest, os.path.abspath(os.path.expanduser(values)))
 
-def getCLIArgs():
+def is_dir(dirname):
+    if not os.path.isdir(dirname):
+        msg = "{0} is not a directory".format(dirname)
+        raise argparse.ArgumentTypeError(msg)
+    else:
+        return dirname
+
+def solveCLIargs():
     parser = argparse.ArgumentParser(description=DESCRIPTION)
     parser.add_argument('folder', help=FOLDER_HELP, type=isDirectory)
     parser.add_argument('-ext', '--extension', help=EXT_HELP, default=EXT_DEFAULT)
